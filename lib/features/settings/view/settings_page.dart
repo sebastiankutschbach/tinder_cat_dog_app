@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// This page shows the different settings for the
+/// user.
+///
+/// Your task is to put the users selection to your BLoC and load the cats or
+/// the dogs from the server based on that.
 class SettingsPage extends StatelessWidget {
   static const routeName = '/settings';
 

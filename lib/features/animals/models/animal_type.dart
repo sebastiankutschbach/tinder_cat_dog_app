@@ -1,1 +1,0 @@
-enum AnimalType { cat, dog }

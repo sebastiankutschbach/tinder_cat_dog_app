@@ -1,16 +1,25 @@
-# tinder_cat_dog_app
+# Tinder for Cats and Dogs challenge
 
-A new Flutter project.
+This is the sample app you can extend to build your solution for the Tinder for Cats and Dogs challenge.
 
-## Getting Started
+You can find the challenge details at ...
 
-This project is a starting point for a Flutter application.
+You don't have to use this skeleton app if you don't want, feel free to start it from scratch.
 
-A few resources to get you started if this is your first Flutter project:
+## Goal
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+The goal of this challenge is to use a backend API and display its result with the help of the BLoC pattern.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## API
+
+Documentation of the REST API: https://tinder-cat-dog-api.herokuapp.com/swagger.html
+
+The API provides endpoints for getting the list of cats and dogs.
+
+It also has an anonymus authentication endpoint (/auth), so you can get an identifier for your user in a form of JWT token.
+
+Once you have the token you can create,update,remove the votes for each animal.
+
+## Challenge submission
+
+Submit your link to the Github repository at ...
