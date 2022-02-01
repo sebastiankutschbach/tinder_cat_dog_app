@@ -2,7 +2,7 @@
 
 This is the sample app you can extend to build your solution for the Tinder for Cats and Dogs challenge.
 
-You can find the challenge details at ...
+You can find the challenge details at https://flutterchallenge.dev/tinder-for-cats-and-dogs
 
 You don't have to use this skeleton app if you don't want, feel free to start it from scratch.
 
