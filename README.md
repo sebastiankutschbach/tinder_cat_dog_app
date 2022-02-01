@@ -22,4 +22,4 @@ Once you have the token you can create,update,remove the votes for each animal.
 
 ## Challenge submission
 
-Submit your link to the Github repository at ...
+Submit your link to the Github repository at https://flutterchallenge.dev/tinder-for-cats-and-dogs
