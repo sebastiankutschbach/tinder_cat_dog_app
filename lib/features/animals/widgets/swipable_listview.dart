@@ -31,7 +31,8 @@ class SwipableListview extends StatelessWidget {
       builder: (context, constraints) => ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => Dismissible(
-          key: ValueKey('item-${index % itemCount}'),
+          // https://stackoverflow.com/questions/47735143/dismissing-a-dismissible-with-flutter-dart
+          key: UniqueKey(),
           child: SizedBox(
             height: constraints.maxHeight,
             width: constraints.maxWidth,
@@ -43,7 +44,8 @@ class SwipableListview extends StatelessWidget {
             ),
           ),
           onDismissed: (direction) {
-            onLikedItem(index % itemCount, direction == DismissDirection.startToEnd);
+            onLikedItem(
+                index % itemCount, direction == DismissDirection.startToEnd);
           },
         ),
       ),
