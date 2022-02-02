@@ -43,7 +43,8 @@ class SwipableListview extends StatelessWidget {
             ),
           ),
           onDismissed: (direction) {
-            onLikedItem(index, direction == DismissDirection.startToEnd);
+            onLikedItem(
+                index % itemCount, direction == DismissDirection.startToEnd);
           },
         ),
       ),

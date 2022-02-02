@@ -1,14 +1,13 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tinder_cat_dog_app/features/animals/animals.dart';
+import 'package:tinder_cat_dog_app/features/animals/bloc/animals_bloc.dart';
+import 'package:tinder_cat_dog_app/features/animals/data/animals_repository.dart';
 import 'package:tinder_cat_dog_app/features/settings/settings.dart';
 
-/// This pages shows a swipable list with the Animals.
-/// Your task here is to add your BLoC to this page.
-///
-/// Your BLoC loads the cats or dogs based on the user preference from the
-/// API.
-///
-/// Feel free to replace the whole page with your own implementation.
 class AnimalsPage extends StatelessWidget {
   static const routeName = '/';
 
@@ -16,25 +15,53 @@ class AnimalsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tinder for Cats and Dogs'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, SettingsPage.routeName);
-              },
-              icon: const Icon(
-                Icons.settings,
-              ))
-        ],
-      ),
-      body: SwipableListview(
-        itemCount: 10,
+    return BlocBuilder<AnimalsBloc, AnimalsState>(
+      builder: (context, state) {
+        return Scaffold(
+            appBar: AppBar(
+              title: const Text('Tinder for Cats and Dogs'),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, SettingsPage.routeName);
+                    },
+                    icon: const Icon(
+                      Icons.settings,
+                    ))
+              ],
+            ),
+            body: _body(context, state));
+      },
+    );
+  }
+
+  _body(BuildContext context, AnimalsState state) {
+    switch (state.runtimeType) {
+      case AnimalsError:
+        return _errorView(context, state as AnimalsError);
+      case AnimalsLoading:
+        return _loadingView(context, state);
+      case AnimalsLoaded:
+        return _listView(context, state as AnimalsLoaded);
+    }
+  }
+
+  _errorView(BuildContext context, AnimalsError state) => Center(
+        child: Text('An error occured: ${state.failure.message}'),
+      );
+
+  _loadingView(BuildContext context, AnimalsState state) => const Center(
+        child: CircularProgressIndicator(),
+      );
+
+  _listView(BuildContext context, AnimalsLoaded state) => SwipableListview(
+        itemCount: state.animals.length,
         itemBuilder: (context, index) => Stack(
           children: [
-            const Positioned.fill(
-              child: FlutterLogo(),
+            Positioned.fill(
+              child: CachedNetworkImage(
+                imageUrl: '$apiBaseUrl/${state.animals[index].path}',
+              ),
             ),
             Positioned(
                 bottom: 30,
@@ -45,7 +72,7 @@ class AnimalsPage extends StatelessWidget {
                   children: [
                     const Icon(Icons.clear),
                     Text(
-                      'Animal $index',
+                      state.animals[index].name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headline3,
                     ),
@@ -54,15 +81,11 @@ class AnimalsPage extends StatelessWidget {
                 ))
           ],
         ),
-        // This callback is run every time when the user swipes the card.
-        // Based on the swipe direction, the value of isLiked contains whether
-        // the user liked the animal at the given index or not.
-
-        // You can react to these events in your BLoC.
         onLikedItem: (index, isLiked) {
-          print('$index is $isLiked');
+          log('$index is $isLiked');
+          context
+              .read<AnimalsBloc>()
+              .add(AnimalVoted(state.animals[index], isLiked));
         },
-      ),
-    );
-  }
+      );
 }
