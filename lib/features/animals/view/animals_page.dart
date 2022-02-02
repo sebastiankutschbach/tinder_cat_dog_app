@@ -42,7 +42,11 @@ class AnimalsPage extends StatelessWidget {
       case AnimalsLoading:
         return _loadingView(context, state);
       case AnimalsLoaded:
-        return _listView(context, state as AnimalsLoaded);
+        if ((state as AnimalsLoaded).animals.isEmpty) {
+          return _emptyView(context, state);
+        } else {
+          return _listView(context, state);
+        }
     }
   }
 
@@ -52,6 +56,10 @@ class AnimalsPage extends StatelessWidget {
 
   _loadingView(BuildContext context, AnimalsState state) => const Center(
         child: CircularProgressIndicator(),
+      );
+
+  _emptyView(BuildContext context, AnimalsState state) => const Center(
+        child: Text('There are currently no animals to vote.'),
       );
 
   _listView(BuildContext context, AnimalsLoaded state) => SwipableListview(

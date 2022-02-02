@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:tinder_cat_dog_app/features/animals/model/animal.dart';
 import 'package:tinder_cat_dog_app/features/animals/model/cat.dart';
+import 'package:tinder_cat_dog_app/features/animals/model/dog.dart';
 import 'package:tinder_cat_dog_app/features/animals/model/failure.dart';
 
 const String apiBaseUrl = 'https://tinder-cat-dog-api.herokuapp.com';
@@ -30,6 +31,19 @@ class AnimalsRepository {
         return Cat.fromJson(json);
       }));
       return right(cats);
+    } on DioError catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  Future<Either<Failure, List<Animal>>> getDogs() async {
+    try {
+      final response = await _dio.get('/dogs');
+      final dogs = List<Dog>.from(response.data.map((json) {
+        log(json.toString());
+        return Dog.fromJson(json);
+      }));
+      return right(dogs);
     } on DioError catch (e) {
       return left(Failure(e.message));
     }

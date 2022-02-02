@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tinder_cat_dog_app/features/animals/animals.dart';
 import 'package:tinder_cat_dog_app/features/animals/bloc/animals_bloc.dart';
+import 'package:tinder_cat_dog_app/features/animals/cubit/settings_cubit.dart';
 import 'package:tinder_cat_dog_app/features/animals/data/animals_repository.dart';
 import 'package:tinder_cat_dog_app/features/settings/settings.dart';
 
@@ -21,19 +22,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsCubit settingsCubit = SettingsCubit();
     final animalsRepo = AnimalsRepository(Dio());
-    final animalsBloc = AnimalsBloc(animalsRepo)
+    final animalsBloc = AnimalsBloc(animalsRepo, settingsCubit)
       ..add(LoginRequested())
       ..add(AnimalsRequested());
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        AnimalsPage.routeName: (context) => BlocProvider<AnimalsBloc>(
-              create: (_) => animalsBloc,
-              child: const AnimalsPage(),
-            ),
-        SettingsPage.routeName: (context) => const SettingsPage()
-      },
+    return BlocProvider(
+      create: (context) => settingsCubit,
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          AnimalsPage.routeName: (context) => BlocProvider<AnimalsBloc>(
+                create: (_) => animalsBloc,
+                child: const AnimalsPage(),
+              ),
+          SettingsPage.routeName: (context) => const SettingsPage()
+        },
+      ),
     );
   }
 }

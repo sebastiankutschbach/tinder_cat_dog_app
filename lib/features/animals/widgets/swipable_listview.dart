@@ -31,7 +31,7 @@ class SwipableListview extends StatelessWidget {
       builder: (context, constraints) => ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => Dismissible(
-          key: ValueKey('item-${index % itemCount}'),
+          key: UniqueKey(),
           child: SizedBox(
             height: constraints.maxHeight,
             width: constraints.maxWidth,

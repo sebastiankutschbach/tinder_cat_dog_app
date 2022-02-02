@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tinder_cat_dog_app/features/animals/cubit/settings_cubit.dart';
 
 /// This page shows the different settings for the
 /// user.
@@ -12,29 +14,35 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.save),
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Settings'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.save),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Text('Cats'),
-          Switch(
-            value: false,
-            onChanged: (value) {},
+          body: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Text('Cats'),
+              Switch(
+                value: state.dogsPreferred,
+                onChanged: (value) => context
+                    .read<SettingsCubit>()
+                    .changePreference(dogsPreferred: value),
+              ),
+              const Text('Dogs'),
+            ],
           ),
-          const Text('Dogs'),
-        ],
-      ),
+        );
+      },
     );
   }
 }
