@@ -37,16 +37,19 @@ class AnimalsBloc extends Bloc<AnimalsEvent, AnimalsState> {
       }
 
       response.fold((failure) => emit(AnimalsError(failure)),
-          (animals) => emit(AnimalsLoaded(animals)));
+          (animals) => emit(AnimalsLoaded(animals, none())));
     });
 
     on<AnimalVoted>((event, emit) async {
-      await _animalsRepo.vote(event.animal, event.isLiked);
+      final result = await _animalsRepo.vote(event.animal, event.isLiked);
 
-      final animals = List<Animal>.from((state as AnimalsLoaded).animals);
-      animals.remove(event.animal);
-
-      emit(AnimalsLoaded(animals));
+      if (result.isNone()) {
+        final animals = List<Animal>.from((state as AnimalsLoaded).animals);
+        animals.remove(event.animal);
+        emit(AnimalsLoaded(animals, result));
+      } else {
+        emit(AnimalsLoaded((state as AnimalsLoaded).animals, result));
+      }
     });
   }
 

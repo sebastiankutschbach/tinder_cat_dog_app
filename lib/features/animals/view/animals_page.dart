@@ -15,7 +15,15 @@ class AnimalsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnimalsBloc, AnimalsState>(
+    return BlocConsumer<AnimalsBloc, AnimalsState>(
+      listener: (context, state) {
+        if (state is AnimalsError) {
+          _showSnackbar(context, state.failure.message);
+        } else if (state is AnimalsLoaded) {
+          state.failure.fold(
+              () => {}, (failure) => _showSnackbar(context, failure.message));
+        }
+      },
       builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
@@ -96,4 +104,9 @@ class AnimalsPage extends StatelessWidget {
               .add(AnimalVoted(state.animals[index], isLiked));
         },
       );
+
+  _showSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
 }

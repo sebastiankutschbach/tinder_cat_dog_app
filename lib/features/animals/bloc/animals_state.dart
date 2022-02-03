@@ -24,9 +24,10 @@ class AnimalsError extends AnimalsState {
 
 class AnimalsLoaded extends AnimalsState {
   final List<Animal> animals;
+  final Option<Failure> failure;
 
-  AnimalsLoaded(this.animals);
+  AnimalsLoaded(this.animals, this.failure);
 
   @override
-  List<Object?> get props => [animals];
+  List<Object?> get props => [animals, failure];
 }

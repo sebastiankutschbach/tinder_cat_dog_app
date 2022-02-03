@@ -51,13 +51,15 @@ class AnimalsRepository {
 
   Future<Option<Failure>> vote(Animal animal, bool isLiked) async {
     try {
+      log(_dio.options.headers['Authorization'].toString());
       final data = {
         "vote_type": animal is Cat ? "cat" : "dog",
         "animal_id": animal.id,
         "liked": isLiked
       };
       log(data.toString());
-      await _dio.post('/votes', data: data);
+      final result = await _dio.post('/votes', data: data);
+      log(result.toString());
       return none();
     } on DioError catch (e) {
       return some(Failure(e.message));
