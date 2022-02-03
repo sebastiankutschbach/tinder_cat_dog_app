@@ -20,7 +20,8 @@ class AnimalsRepository {
 
   Future<void> authorize() async {
     final response = await _dio.post('/auth');
-    _dio.options.headers['Authorization'] = response.headers['Authorization'];
+    _dio.options.headers['Authorization'] =
+        response.headers['Authorization']?.first;
   }
 
   Future<Either<Failure, List<Animal>>> getCats() async {
